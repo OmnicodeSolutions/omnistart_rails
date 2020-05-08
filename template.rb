@@ -36,8 +36,9 @@ def rails_6?
 end
 
 def add_gems
-  gem 'standard'
   gem 'devise', '~> 4.7', '>= 4.7.0'
+  gem 'rspec-rails'
+  gem 'standard'
 end
 
 def set_application_name
@@ -60,6 +61,10 @@ def standardize
   rails_command "standard:fix"
 end
 
+def install_rspec
+  generate "rspec:install"
+end
+
 # Main setup
 unless rails_6?
   say "omnistart app template cannot be created. Use rails 6!", :blue
@@ -73,6 +78,7 @@ add_gems
 after_bundle do
   set_application_name
   stop_spring
+  install_rspec
 
   copy_templates
   standardize
