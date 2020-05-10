@@ -65,6 +65,18 @@ def install_rspec
   generate "rspec:install"
 end
 
+def add_generators
+  environment do
+    <<~EOF
+    config.generators do |generators|
+      generators.test_framework :rspec
+      generators.integration_tool :rspec
+      generators.orm :active_record, primary_key_type: :uuid
+    end
+    EOF
+  end
+end
+
 # Main setup
 unless rails_6?
   say "omnistart app template cannot be created. Use rails 6!", :blue
@@ -76,9 +88,10 @@ add_template_repository_to_source_path
 add_gems
 
 after_bundle do
-  set_application_name
   stop_spring
   install_rspec
+  add_generators
+  set_application_name
 
   copy_templates
   standardize
